@@ -143,7 +143,11 @@ async function handleFiles(fileList) {
         return;
     }
 
-    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+    const files = Array.from(fileList).filter(f => {
+        return f.type.startsWith('image/') ||
+            f.name.toLowerCase().endsWith('.heic') ||
+            f.name.toLowerCase().endsWith('.heif');
+    });
     if (files.length === 0) return;
 
     showLoading(`Processing ${files.length} images...`);
@@ -157,7 +161,27 @@ async function handleFiles(fileList) {
         const progress = Math.round(((i) / files.length) * 100);
         showLoading(`Processing image ${i + 1} of ${files.length}...`, progress);
         try {
-            const img = await loadImage(files[i]);
+            let fileToProcess = files[i];
+
+            // Check if HEIC/HEIF and convert
+            if (fileToProcess.name.toLowerCase().endsWith('.heic') || fileToProcess.name.toLowerCase().endsWith('.heif')) {
+                showLoading(`Converting HEIC image ${i + 1}...`, progress);
+                try {
+                    const convertedBlob = await heic2any({
+                        blob: fileToProcess,
+                        toType: "image/jpeg",
+                        quality: 0.8
+                    });
+                    // Handle case where heic2any returns an array (for multi-image HEIC)
+                    const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob;
+                    fileToProcess = blob;
+                } catch (e) {
+                    console.error('HEIC conversion failed:', e);
+                    throw new Error('HEIC conversion failed');
+                }
+            }
+
+            const img = await loadImage(fileToProcess);
             const detections = await detectFace(img);
 
             state.images.push({
