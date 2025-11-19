@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Time-Lapse | Align & Animate</title>
+    <meta name="description"
+        content="Create stunning time-lapse videos from your selfies. Automatically detects and aligns faces for a smooth transition.">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <span class="material-symbols-rounded">face</span>
+                <h1>Face Time-Lapse</h1>
+            </div>
+            <p class="subtitle">Turn your daily selfies into a perfectly aligned story.</p>
+        </header>
+
+        <main class="main-content">
+            <section class="upload-section" id="uploadSection">
+                <div class="drop-zone" id="dropZone">
+                    <span class="material-symbols-rounded icon-large">add_photo_alternate</span>
+                    <h2>Upload Photos</h2>
+                    <p>Drag & drop your images here, or click to browse</p>
+                    <p class="hint">Supported: JPG, PNG (Max 50 files recommended)</p>
+                    <input type="file" id="fileInput" multiple accept="image/jpeg, image/png">
+                </div>
+            </section>
+
+            <section class="editor-section hidden" id="editorSection">
+                <div class="canvas-container">
+                    <canvas id="previewCanvas"></canvas>
+                    <div class="loading-overlay hidden" id="loadingOverlay">
+                        <div class="spinner"></div>
+                        <p id="loadingText">Processing...</p>
+                        <div class="progress-bar-container hidden" id="progressBarContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-container">
+                    <div class="control-group">
+                        <label>Playback Speed</label>
+                        <div class="slider-wrapper">
+                            <span class="material-symbols-rounded">slow_motion_video</span>
+                            <input type="range" id="speedRange" min="1" max="30" value="10">
+                            <span class="material-symbols-rounded">speed</span>
+                        </div>
+                        <span class="value-display" id="speedValue">10 fps</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Zoom / Scale</label>
+                        <div class="slider-wrapper">
+                            <span class="material-symbols-rounded">zoom_out</span>
+                            <input type="range" id="zoomRange" min="10" max="100" value="25">
+                            <span class="material-symbols-rounded">zoom_in</span>
+                        </div>
+                        <button class="btn secondary small" id="autoFitBtn" title="Auto-fit to prevent cropping">
+                            <span class="material-symbols-rounded">fit_screen</span> Auto-Fit
+                        </button>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Alignment</label>
+                        <div class="toggle-wrapper">
+                            <button class="toggle-btn active" id="alignEyesBtn" title="Align Eyes">
+                                <span class="material-symbols-rounded">visibility</span> Eyes
+                            </button>
+                            <button class="toggle-btn" id="noAlignBtn" title="No Alignment">
+                                <span class="material-symbols-rounded">image</span> None
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn secondary" id="resetBtn">
+                            <span class="material-symbols-rounded">restart_alt</span> Start Over
+                        </button>
+                        <div class="export-group">
+                            <button class="btn primary" id="exportGifBtn">
+                                <span class="material-symbols-rounded">gif</span> Export GIF
+                            </button>
+                            <button class="btn primary" id="exportMp4Btn">
+                                <span class="material-symbols-rounded">movie</span> Export MP4
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>Privacy First: All processing happens locally in your browser. Your photos never leave your device.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
